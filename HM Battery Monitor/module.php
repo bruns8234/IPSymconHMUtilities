@@ -5,7 +5,7 @@ if (!defined('VM_UPDATE')) { define("VM_UPDATE", IPS_BASE + 603); }
 
 
     // Klassendefinition
-    class HomematicBatteriyMonitor extends IPSModule {
+    class HomeMaticBatteryMonitor extends IPSModule {
  
         // Der Konstruktor des Moduls
         // Überschreibt den Standard Kontruktor von IPS
