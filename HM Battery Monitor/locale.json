@@ -1,0 +1,9 @@
+{
+	"translations": {
+		"de": {
+			"Welcome": "Willkommen",
+			"My name is %s": "Mein Name lautet %s",
+			"Example": "Beispiel"
+		}
+	}
+}
