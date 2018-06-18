@@ -21,8 +21,7 @@ if (!defined('VM_UPDATE')) { define("VM_UPDATE", IPS_BASE + 603); }
             // Diese Zeile nicht löschen.
             parent::Create();
  
-			$this->RegisterPropertyInteger("LOWBAT_ID", 0);		// ID der Batterievariablen (bool, true=Bat.leer, false=Bat.voll)
-			$this->RegisterPropertyBoolean("LAST_STATE", 0);
+			$this->RegisterPropertyInteger("LOWBAT_ID", 0);
         }
  
         // Überschreibt die intere IPS_ApplyChanges($id) Funktion
@@ -50,20 +49,36 @@ if (!defined('VM_UPDATE')) { define("VM_UPDATE", IPS_BASE + 603); }
 		}
 		
 		public function HandleUpdate($NewState) {
+
+			// Actual Status of Module (1=Battery empty, 2=Battery weak, 3=Battery full)
+			$ModuleStateID = $this->GetIDForIdent("STATE");
+			$ModuleState   = GetValue($ModuleStateID);
 			
-			$LastStateID = $this->GetIDForIdent("LAST_STATE");
-			$FirstLowID  = $this->GetIDForIdent("FIRST_LOW");
+			// Date of first LOWBAT alarm
+			$FirstLowAlarmID = $this->GetIDForIdent("FIRST_LOW");
+
+			// Date of last battery change
+			$LastBatteryChangeID = $this->GetIDForIdent("LAST_CHANGE");
 			
-			$LastState = GetValue($LastStateID);
-			
-			if ($lastState == false && $NewState == true) {
-				$this->SendDebug("HandleUpdate", "Change from FULL to EMPTY battery state", 0);
-				// First Indication of a empty battery
-				SetValue($LastStateID, true);
-				SetValue($FirstLowID, date("d.m.Y"));
-				SetValue($State, 0);
+			// Handle change of LOWBAT
+			if ($NewState == true && $ModuleState == 3) {
+				// New LOWBAT indication arrived
+				$this->SendDebug("HandleUpdate", "Battery State Change from FULL to EMPTY", 0);
+				SetValue($this->FirstLowAlarmID, date("d.m.Y"));
+				SetValue($this->ModuleStateID, 1);
 				return;
 			}
-			if ($lastState == false && 
+			if ($NewState == true && $ModuleState == 2) {
+				$this->SendDebug("HandleUpdate", "Battery State Change from WEAK to EMPTY", 0);
+				SetValue($this->ModuleStateID, 1);
+				return;
+			}
+			if ($NewState == false && $ModuleState == 1) {
+				// Battery is weak, not full...
+				$this->SendDebug("HandleUpdate", "Battery State Change from EMPTY to WEAK", 0);
+				SetValue($this->ModuleStateID, 2);
+				return;
+			}
 		}
+	}
 ?>
