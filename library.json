@@ -1,8 +1,8 @@
 {
 	"id": "{DCF9315E-30C7-4125-A0D9-9583C4B816B7}",
-	"author": "Thorsten Bruns",
+	"author": "bruns8234",
 	"name": "HomeMatic Utilities",
-	"url": "https://github.com/bruns8234/IPSHMUtilities",
+	"url": "https://github.com/bruns8234/IPSymconHMUtilities",
 	"compatibility": {
 		"version": "4.2",
 	},
