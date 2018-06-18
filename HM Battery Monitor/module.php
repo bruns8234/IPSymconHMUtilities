@@ -30,6 +30,7 @@ if (!defined('VM_UPDATE')) { define("VM_UPDATE", IPS_BASE + 603); }
             parent::ApplyChanges();
 			
 			$this->RegisterVariableInteger("STATE", "State");
+			$this->SetState(3);
 			$this->RegisterVariableString("FIRST_LOW", "First Alarm");
 			$this->RegisterVariableString("LAST_CHANGE", "Last Change");
 			
@@ -79,6 +80,12 @@ if (!defined('VM_UPDATE')) { define("VM_UPDATE", IPS_BASE + 603); }
 				SetValue($this->ModuleStateID, 2);
 				return;
 			}
+		}
+		
+		public function SetState($NewState) {
+		
+			SetValue($this->GetIDForIdent("STATE"), $NewState);
+			return;
 		}
 	}
 ?>
