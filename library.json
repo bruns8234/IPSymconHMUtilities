@@ -4,7 +4,7 @@
 	"name": "HomeMatic Utilities",
 	"url": "https://github.com/bruns8234/IPSymconHMUtilities",
 	"compatibility": {
-		"version": "4.2",
+		"version": "4.2"
 	},
 	"version": "0.1",
 	"build": 0,
