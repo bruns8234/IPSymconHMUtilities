@@ -44,7 +44,7 @@ if (!defined('VM_UPDATE')) { define("VM_UPDATE", IPS_BASE + 603); }
 			
 			$sourceID = $this->ReadPropertyInteger("LOWBAT_ID");
 			if($sourceID == $SenderID) {
-				$this->HandeUpdate(GetValue($sourceID));
+				$this->HandleUpdate(GetValue($sourceID));
 				return;
 			}
 		}
