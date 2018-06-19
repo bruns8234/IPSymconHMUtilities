@@ -33,6 +33,7 @@ if (!defined('VM_UPDATE')) { define("VM_UPDATE", IPS_BASE + 603); }
 			$this->SetState(3);
 			$this->RegisterVariableString("FIRST_LOW", "First Alarm");
 			$this->RegisterVariableString("LAST_CHANGE", "Last Change");
+			$this->EnableAction("LAST_CHANGE");
 			
 			$lowbatID = $this->ReadPropertyInteger("LOWBAT_ID");
 			$this->RegisterMessage($lowbatID, VM_UPDATE);
@@ -58,9 +59,6 @@ if (!defined('VM_UPDATE')) { define("VM_UPDATE", IPS_BASE + 603); }
 			// Date of first LOWBAT alarm
 			$FirstLowAlarmID = $this->GetIDForIdent("FIRST_LOW");
 
-			// Date of last battery change
-			$LastBatteryChangeID = $this->GetIDForIdent("LAST_CHANGE");
-			
 			// Handle change of LOWBAT
 			if ($NewState == true && $ModuleState == 3) {
 				// New LOWBAT indication arrived
@@ -81,11 +79,32 @@ if (!defined('VM_UPDATE')) { define("VM_UPDATE", IPS_BASE + 603); }
 				return;
 			}
 		}
+		public function RequestAction($Ident, $Value) {
+		
+			switch($Ident) {
+				case "LAST_CHANGE":
+					$this->SaveBatteryChange();
+				default:
+					throw new Exception("Invalid Ident");
+			}
+		}
 		
 		public function SetState($NewState) {
 		
 			SetValue($this->GetIDForIdent("STATE"), $NewState);
 			return;
+		}
+		
+		public function SaveBatteryChange() {
+			
+			if (GetValue($this->GetIDForIdent("STATE") !== false) {
+				// Not allowed, because battery still indicates as empty
+			} else {
+				// Yep, we can save the change date and reset state to full
+				SetValue($this->GetIDForIdent("FIRST_LOW"), "");
+				SetValue($this->GetIDForIdent("LAST_CHANGE"), date("d.m.Y"));
+				SetValue($this->GetIDForIdent("STATE"), 3);
+			}
 		}
 	}
 ?>
