@@ -65,8 +65,8 @@ if (!defined('VM_UPDATE')) { define("VM_UPDATE", IPS_BASE + 603); }
 			if ($NewState == true && $ModuleState == 3) {
 				// New LOWBAT indication arrived
 				$this->SendDebug("HandleUpdate", "Battery State Change from FULL to EMPTY", 0);
-				SetValue($this->FirstLowAlarmID, date("d.m.Y"));
-				SetValue($this->ModuleStateID, 1);
+				SetValue($FirstLowAlarmID, date("d.m.Y"));
+				SetValue($ModuleStateID, 1);
 				return;
 			}
 			if ($NewState == true && $ModuleState == 2) {
