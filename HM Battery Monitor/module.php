@@ -49,7 +49,7 @@ if (!defined('VM_UPDATE')) { define("VM_UPDATE", IPS_BASE + 603); }
 			}
 		}
 		
-		public function HandleUpdate($NewState) {
+		public function HandleUpdate(bool $NewState) {
 
 			// Actual Status of Module (1=Battery empty, 2=Battery weak, 3=Battery full)
 			$ModuleStateID = $this->GetIDForIdent("STATE");
@@ -71,13 +71,13 @@ if (!defined('VM_UPDATE')) { define("VM_UPDATE", IPS_BASE + 603); }
 			}
 			if ($NewState == true && $ModuleState == 2) {
 				$this->SendDebug("HandleUpdate", "Battery State Change from WEAK to EMPTY", 0);
-				SetValue($this->ModuleStateID, 1);
+				SetValue($ModuleStateID, 1);
 				return;
 			}
 			if ($NewState == false && $ModuleState == 1) {
 				// Battery is weak, not full...
 				$this->SendDebug("HandleUpdate", "Battery State Change from EMPTY to WEAK", 0);
-				SetValue($this->ModuleStateID, 2);
+				SetValue($ModuleStateID, 2);
 				return;
 			}
 		}
