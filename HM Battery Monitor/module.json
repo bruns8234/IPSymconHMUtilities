@@ -1,10 +1,10 @@
 {
 	"id": "{3AFD8764-0C36-4E2B-9E7F-A86FB9C57AE4}",
-	"name": "HomeMaticBatteryMonitor",
+	"name": "HomeMatic Battery Monitor",
 	"type": 3,
 	"vendor": "",
 	"aliases": [
-		"HomeMaticBatteryMonitor"
+		"HomeMatic Battery Monitor"
 	],
 	"parentRequirements": [],
 	"childRequirements": [],
