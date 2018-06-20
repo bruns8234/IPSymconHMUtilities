@@ -1,4 +1,4 @@
-<?php
+<?
 
 	// --- BASE MESSAGE
 	if (!defined("IPS_BASE")) {
@@ -177,5 +177,4 @@
 		define('IS_EBASE', 200);          //default errorcode
 		define('IS_NOTCREATED', IS_EBASE + 1); //instance could not be created
 	}
-
-}
+?>
