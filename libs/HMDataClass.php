@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
     // --- BASE MESSAGE
     if (!defined('IPS_BASE')) {
         define('IPS_BASE', 10000);                             //Base Message

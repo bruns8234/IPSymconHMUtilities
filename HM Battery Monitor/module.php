@@ -1,6 +1,8 @@
 <?php
 
-require_once __DIR__.'/../libs/HMDataClass.php';
+declare(strict_types=1);
+
+require_once __DIR__ . '/../libs/HMDataClass.php';
 
 class HomeMaticBatteryMonitor extends IPSModule
 {
@@ -31,7 +33,9 @@ class HomeMaticBatteryMonitor extends IPSModule
 
     public function MessageSink($TimeStamp, $SenderID, $Message, $Data)
     {
-        $this->SendDebug('MessageSink', 'SenderID: '.$SenderID.', Message: '.$Message, 0);
+
+        $this->SendDebug('MessageSink', 'SenderID: ' . $SenderID . ', Message: ' . $Message, 0);
+
 
         $sourceID = $this->ReadPropertyInteger('LOWBAT_ID');
         if ($sourceID == $SenderID) {
@@ -88,6 +92,8 @@ class HomeMaticBatteryMonitor extends IPSModule
     private function SetState($NewState)
     {
         SetValue($this->GetIDForIdent('STATE'), $NewState);
+
+        return;
     }
 
     private function SaveBatteryChange()
