@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+
 require_once __DIR__ . '/../libs/HMDataClass.php';
 
 class HomeMaticBatteryMonitor extends IPSModule
@@ -32,11 +33,14 @@ class HomeMaticBatteryMonitor extends IPSModule
 
     public function MessageSink($TimeStamp, $SenderID, $Message, $Data)
     {
+
         $this->SendDebug('MessageSink', 'SenderID: ' . $SenderID . ', Message: ' . $Message, 0);
+
 
         $sourceID = $this->ReadPropertyInteger('LOWBAT_ID');
         if ($sourceID == $SenderID) {
             $this->HandleUpdate(GetValue($sourceID));
+
             return;
         }
     }
@@ -67,17 +71,20 @@ class HomeMaticBatteryMonitor extends IPSModule
             $this->SendDebug('HandleUpdate', 'Battery State Change from FULL to EMPTY', 0);
             SetValue($FirstLowAlarmID, date('d.m.Y'));
             SetValue($ModuleStateID, 1);
+
             return;
         }
         if ($NewState == true && $ModuleState == 2) {
             $this->SendDebug('HandleUpdate', 'Battery State Change from WEAK to EMPTY', 0);
             SetValue($ModuleStateID, 1);
+
             return;
         }
         if ($NewState == false && $ModuleState == 1) {
             // Battery is weak, not full...
             $this->SendDebug('HandleUpdate', 'Battery State Change from EMPTY to WEAK', 0);
             SetValue($ModuleStateID, 2);
+
             return;
         }
     }
@@ -85,6 +92,7 @@ class HomeMaticBatteryMonitor extends IPSModule
     private function SetState($NewState)
     {
         SetValue($this->GetIDForIdent('STATE'), $NewState);
+
         return;
     }
 
@@ -94,10 +102,12 @@ class HomeMaticBatteryMonitor extends IPSModule
         $AlarmState = GetValue($this->ReadPropertyInteger('LOWBAT_ID'));
         if ($AlarmState != false or $ModuleState == 3) {
             echo 'No Alarm! No Action needed!';
+
             return;
         } else {
             if ($AlarmState == true) {
                 echo 'Not allowed! Need to clear alarm first!';
+
                 return;
             } else {
                 // Yep, we can save the change date and reset state to full
