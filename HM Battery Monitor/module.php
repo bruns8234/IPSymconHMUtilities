@@ -7,7 +7,7 @@ require_once __DIR__ . '/../libs/vP_Toolbox.php';
 
 class HomeMaticBatteryMonitor extends IPSModule
 {
-	use VariableProfileTools;
+	use VariableProfileHelper;
 	
     public function Create()
     {
