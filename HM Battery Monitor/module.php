@@ -3,9 +3,12 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/../libs/HMDataClass.php';
+require_once __DIR__ . '/../libs/vP_Toolbox.php';
 
 class HomeMaticBatteryMonitor extends IPSModule
 {
+	use VariableProfileTools;
+	
     public function Create()
     {
         parent::Create();
@@ -35,7 +38,6 @@ class HomeMaticBatteryMonitor extends IPSModule
     {
 
         $this->SendDebug('MessageSink', 'SenderID: ' . $SenderID . ', Message: ' . $Message, 0);
-
 
         $sourceID = $this->ReadPropertyInteger('LOWBAT_ID');
         if ($sourceID == $SenderID) {
@@ -96,10 +98,11 @@ class HomeMaticBatteryMonitor extends IPSModule
         return;
     }
 
-    private function SaveBatteryChange()
+    public function SaveBatteryChange()
     {
         $ModuleState = GetValue($this->GetIDForIdent('STATE'));
         $AlarmState = GetValue($this->ReadPropertyInteger('LOWBAT_ID'));
+		
         if ($AlarmState != false or $ModuleState == 3) {
             echo 'No Alarm! No Action needed!';
 
@@ -114,7 +117,11 @@ class HomeMaticBatteryMonitor extends IPSModule
                 SetValue($this->GetIDForIdent('FIRST_LOW'), '--.--.--');
                 SetValue($this->GetIDForIdent('LAST_CHANGE'), date('d.m.Y'));
                 SetValue($this->GetIDForIdent('STATE'), 3);
+				
+				return;
             }
         }
     }
+	
+	protected private function RegisterProfileInteger($Name, $Icon, 
 }
