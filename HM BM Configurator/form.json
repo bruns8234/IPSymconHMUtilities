@@ -1,0 +1,50 @@
+{
+    "elements": [{
+            "name": "RootId",
+            "type": "SelectCategory",
+            "caption": "Create under category"
+        }
+    ],
+    "actions": [
+        {
+            "type": "Configurator",
+            "name": "Configuration",
+            "rowCount": 20,
+            "add": false,
+            "delete": true,
+            "sort": {
+                "column": "group",
+                "direction": "ascending"
+            },
+			
+			'Valid' => false, 'VarID' => $LowbatID, 'Instance' => $InstanceID, 'Device' => '', 'Room' => '', 'Floor' => ''
+			
+            "columns": [{
+					"caption": "Valid",
+					"name": "valid",
+					"width": "100px"
+				}, {
+                    "caption": "VarID",
+                    "name": "varID",
+                    "width": "100px"
+                }, {
+                    "caption": "InstanceID",
+                    "name": "instanceID",
+                    "width": "100px"
+                }, {
+					"caption": "Device",
+					"name": "device",
+					"width": "auto"
+				}, {
+					"caption": "Room",
+					"name": "room",
+					"width": "100px"
+				}, {
+					"caption": "Floor",
+					"name": "floor",
+					"width": "100px"
+				}
+            ],
+            "values": []
+        }]
+}

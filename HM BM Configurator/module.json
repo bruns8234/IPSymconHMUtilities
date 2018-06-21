@@ -1,0 +1,13 @@
+{
+	"id": "{F85AFAEC-182E-4FB2-A0AF-86AB5A9D08F4}",
+	"name": "HomeMatic BM Configurator",
+	"type": 4,
+	"vendor": "",
+	"aliases": [
+		"HomeMatic Battery Monitor Configurator"
+	],
+	"parentRequirements": [],
+	"childRequirements": [],
+	"implemented": [],
+	"prefix": "HMUTIL"
+}
