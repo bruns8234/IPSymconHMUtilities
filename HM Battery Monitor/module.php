@@ -23,11 +23,11 @@ class HomeMaticBatteryMonitor extends IPSModule
         $this->RegisterProfileIntegerEx('HMUTIL.ModuleState', '', '', '', [[1, 'Empty', '', 0xff0000], [2, 'Weak', '', 0xffff00], [3, 'Full', '', 0x00ff00]]);
         $this->RegisterProfileIntegerEx('HMUTIL.SaveButton', '', '', '', [[0, 'Save', '', 0x0000ff]]);
 
-        $this->RegisterVariableInteger('STATE', 'State', 'HMUTIL.ModuleState');
-        $this->SetState(3);
-        $this->RegisterVariableString('FIRST_LOW', 'First bat. alarm');
-        $this->RegisterVariableString('LAST_CHANGE', 'Last bat. change');
-        $this->RegisterVariableInteger('SAVE_CHANGE', 'Save bat. change', 'HMUTIL.SaveButton');
+        $this->RegisterVariableInteger('STATE', 'State', 'HMUTIL.ModuleState', 1);
+        $this->RegisterVariableString('FIRST_LOW', 'First bat. alarm', '', 2);
+        $this->RegisterVariableString('LAST_CHANGE', 'Last bat. change', '', 3);
+        $this->RegisterVariableInteger('SAVE_CHANGE', 'Save bat. change', 'HMUTIL.SaveButton', 4);
+        $this->PresetValues();
         $this->EnableAction('SAVE_CHANGE');
 
         $lowbatID = $this->ReadPropertyInteger('LOWBAT_ID');
@@ -52,11 +52,30 @@ class HomeMaticBatteryMonitor extends IPSModule
         switch ($Ident) {
             case 'SAVE_CHANGE':
                 $this->SaveBatteryChange();
+				break;
             default:
-                throw new Exception('Invalid Ident');
+                throw new Exception('RequestAction: Invalid Ident ' . $Ident);
         }
     }
 
+	public function UpdateInstanceName()
+	{
+		// Get Name of Instance:
+		$name = IPS_GetName($this->instanceID);
+		// Get full path of Instance:
+		$id = $this->instanceID;
+		$path = '';
+		do {
+			$id = IPS_GetParent($id);
+			if ($id > 0) {
+				$path = IPS_GetName($id) . '/' . $path;
+			}
+		} while ($id > 0);
+		IPS_SetName($this->instanceID, $path . $name);
+		
+		return true;
+	}
+	
     private function HandleUpdate(bool $NewState)
     {
 
@@ -91,26 +110,25 @@ class HomeMaticBatteryMonitor extends IPSModule
         }
     }
 
-    private function SetState($NewState)
+    private function PresetValues()
     {
-        SetValue($this->GetIDForIdent('STATE'), $NewState);
-
-        return;
+		// Preset the instance variables
+		SetValue($this->GetIDForIdent('STATE'), 3);
+		SetValue($this->GetIDForIdent('FIRST_LOW'), '--.--.--');
+		SetValue($this->GetIDForIdent('LAST_CHANGE'), '--.--.--');
+		
+	    return;
     }
-
+	
     public function SaveBatteryChange()
     {
         $ModuleState = GetValue($this->GetIDForIdent('STATE'));
         $AlarmState = GetValue($this->ReadPropertyInteger('LOWBAT_ID'));
 		
         if ($AlarmState != false or $ModuleState == 3) {
-            echo 'No Alarm! No Action needed!';
-
             return;
         } else {
             if ($AlarmState == true) {
-                echo 'Not allowed! Need to clear alarm first!';
-
                 return;
             } else {
                 // Yep, we can save the change date and reset state to full
@@ -122,6 +140,4 @@ class HomeMaticBatteryMonitor extends IPSModule
             }
         }
     }
-	
-	protected private function RegisterProfileInteger($Name, $Icon, 
 }

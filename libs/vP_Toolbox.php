@@ -65,10 +65,10 @@ trait VariableProfileHelper
         }
         IPS_SetVariableProfileIcon($Name, $Icon);
         IPS_SetVariableProfileText($Name, $Prefix, $Suffix);
-        if ($VarTyp != vtBoolean) {
+        if ($VarTyp != 0) {
             IPS_SetVariableProfileValues($Name, $MinValue, $MaxValue, $StepSize);
         }
-        if ($VarTyp == vtFloat) {
+        if ($VarTyp == 2) {
             IPS_SetVariableProfileDigits($Name, $Digits);
         }
     }
@@ -84,10 +84,9 @@ trait VariableProfileHelper
                 continue;
             } else {
 				$info = IPS_GetVariable($VarID);
-				$hold = ($info['VariableCustomProfile'] == $Name) or 
-						($info['VariableProfile'] == $Name)
+				$hold = ($info['VariableCustomProfile'] == $Name) or ($info['VariableProfile'] == $Name);
             }
-			if $hold return;
+			if ($hold == true) return;
         }
         IPS_DeleteVariableProfile($Name);
     }
