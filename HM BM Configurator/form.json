@@ -13,36 +13,29 @@
             "add": false,
             "delete": true,
             "sort": {
-                "column": "group",
+                "column": "varID",
                 "direction": "ascending"
             },
-			
-			'Valid' => false, 'VarID' => $LowbatID, 'Instance' => $InstanceID, 'Device' => '', 'Room' => '', 'Floor' => ''
-			
             "columns": [{
-					"caption": "Valid",
-					"name": "valid",
+					"caption": "Address",
+					"name": "address",
+					"width": "150px"
+				}, {
+					"caption": "Variable",
+					"name": "variable",
 					"width": "100px"
 				}, {
-                    "caption": "VarID",
-                    "name": "varID",
-                    "width": "100px"
+                    "caption": "Path",
+                    "name": "path",
+                    "width": "300px"
+				}, {
+					"caption": "HM-Device",
+                    "name": "device",
+                    "width": "300px"
                 }, {
-                    "caption": "InstanceID",
-                    "name": "instanceID",
-                    "width": "100px"
-                }, {
-					"caption": "Device",
-					"name": "device",
+					"caption": "Name",
+					"name": "name",
 					"width": "auto"
-				}, {
-					"caption": "Room",
-					"name": "room",
-					"width": "100px"
-				}, {
-					"caption": "Floor",
-					"name": "floor",
-					"width": "100px"
 				}
             ],
             "values": []
