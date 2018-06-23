@@ -1,8 +1,9 @@
 {
-    "elements": [{
-            "name": "RootId",
+    "elements": [
+		{
             "type": "SelectCategory",
-            "caption": "Create under category"
+            "name": "ROOT_ID",
+            "caption": "Parent for new instances"
         }
     ],
     "actions": [
@@ -13,7 +14,7 @@
             "add": false,
             "delete": true,
             "sort": {
-                "column": "varID",
+                "column": "address",
                 "direction": "ascending"
             },
             "columns": [{

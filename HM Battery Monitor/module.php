@@ -4,16 +4,19 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/../libs/HMDataClass.php';
 require_once __DIR__ . '/../libs/vP_Toolbox.php';
+require once __DIR__ . '/../libs/UserNameInterface.php';
 
 class HomeMaticBatteryMonitor extends IPSModule
 {
 	use VariableProfileHelper;
+	use UserNameInterface;
 	
     public function Create()
     {
         parent::Create();
 
         $this->RegisterPropertyInteger('LOWBAT_ID', 0);
+		$this->RegisterPropertyBoolean('UPDATE_NAME', false);											   
     }
 
     public function ApplyChanges()
@@ -32,6 +35,9 @@ class HomeMaticBatteryMonitor extends IPSModule
 
         $lowbatID = $this->ReadPropertyInteger('LOWBAT_ID');
         $this->RegisterMessage($lowbatID, VM_UPDATE);
+		
+		if ($this->ReadPropertyBoolean('UPDATE_NAME') == true) {
+			$this->UpdateInstanceName();
     }
 
     public function MessageSink($TimeStamp, $SenderID, $Message, $Data)
@@ -60,18 +66,24 @@ class HomeMaticBatteryMonitor extends IPSModule
 
 	public function UpdateInstanceName()
 	{
-		// Get Name of Instance:
-		$name = IPS_GetName($this->instanceID);
-		// Get full path of Instance:
-		$id = $this->instanceID;
-		$path = '';
-		do {
-			$id = IPS_GetParent($id);
-			if ($id > 0) {
-				$path = IPS_GetName($id) . '/' . $path;
-			}
-		} while ($id > 0);
-		IPS_SetName($this->instanceID, $path . $name);
+
+		// Clear flag for automatic name updates if set
+		if ($this->ReadPropertyBoolean('UPDATE_NAME') == true) {
+			IPS_SetProperty($this->InstanceID, 'UPDATE_NAME', false);
+		}
+		
+		// Get ID of LOWBAT-Variable
+		$id = $this->ReadPropertyInteger("LOWBAT_ID");
+		
+		// getVariableData returns a full path and a clear text name for the
+		// HomeMatic instance containing the lowbat variable. The function must be
+		// customised in the trait file UserNameInterface.php.
+		$data = $this->getVariableData($id)
+		// Now we have in $data: [0]=path, [1]=name (or device when unknown), [2]=device
+		
+		// Update Instance Data
+		IPS_SetName($this->InstanceID, $data[1]);
+		$this->SetSummary("Path: " . $data[0] . "\r\nDevice: " . $data[2]);
 		
 		return true;
 	}

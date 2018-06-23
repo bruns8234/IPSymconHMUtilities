@@ -2,37 +2,12 @@
 
 declare(strict_types=1);
 
+require_once __DIR__ . '/../libs/Dbg_Toolbox.php';
+
 class HomeMaticBMConfigurator extends IPSModule
 {
-	private $hm_names = [
-		'ANZ' => 'Funk-Statusanzeige LED',
-		'FBH' => 'Fernbedienung (Hand)',
-		'FBA' => 'Fernbedienung (Aufputz)',
-		'FBU' => 'Fernbedienung (Unterputz)',
-		'FBV' => 'Fernbedienung (Modul)',
-		'TFK' => 'Tür/Fensterkontakt',
-		'KMS' => 'Kombi-Sensor',
-		'DMZ' => 'Dimmer (Zwischendecke)',
-		'DMS' => 'Dimmer (Zwischenstecker)',
-		'DMU' => 'Dimmer (Unterputz)',
-		'DMM' => 'Dimmer (Markenschalter)',
-		'DMP' => 'PWM-Dimmer (Zwischendecke)',
-		'STS' => 'Schalter (Zwischenstecker)',
-		'STM' => 'Schalter (Zwischenstecker) mit Leistungsmessung',
-		'STU' => 'Schalter (Unterputz)',
-		'STA' => 'Schalter (Aufputz)',
-		'STV' => 'Schalter (Modul)',
-		'RLU' => 'Rolladenschalter (Unterputz)',
-		'RTR' => 'Raumtemperaturregler',
-		'HZV' => 'Heizkörperventilantrieb',
-		'HRV' => 'Heizungsregelventil',
-		'TSA' => 'Türschlossantrieb',
-		'FEA' => 'Fenster-Kipp-Antrieb',
-		'FGT' => 'MP3 Funk-Gong (Tischgerät)',
-		'FRM' => 'Funk-Rauchmelder',
-		'REG' => 'Regensensor'
-	];
-
+	use DebugHelper;
+	
 	public function Create()
 	{
 		parent::Create();
@@ -53,37 +28,8 @@ class HomeMaticBMConfigurator extends IPSModule
 		asort($Instances);
 		sort($Variables);
 		
-		$count = 0;
-		$out   = '';
-		foreach($Instances as $InstanceID => $VariableID) {
-			if ($count < 20) {
-				$out .= sprintf('[%u] %u  ', $InstanceID, $VariableID);
-				$count++;
-			} else {
-				$this->SendDebug('GetConfForm', 'Content of $Instances: ' . $out, 0);
-				$out = '';
-				$count = 0;
-			}
-		}
-		if ($count > 0) {
-			$this->SendDebug('GetConfForm', 'Content of $Instances: ' . $out, 0);
-		}
-
-		$count=0;
-		$out='';
-		foreach($Variables as $Index => $VariableID) {
-			if ($count < 20) {
-				$out .= sprintf('[%u] %u  ', $Index, $VariableID);
-				$count++;
-			} else {
-				$this->SendDebug('GetConfForm', 'Content of $Variables: ' . $out, 0);
-				$out = '';
-				$count = 0;
-			}
-		}
-		if ($count > 0) {
-			$this->SendDebug('GetConfForm', 'Content of $Variables: ' . $out, 0);
-		}
+		$this->SendDebugArray('GetConfigForm', 'Instances', $Instances, '[%u] %u', 20);
+		$this->SendDebugArray('GetConfigForm', 'Variables', $Variables, '[%u] %u', 20);
 		
 		$Form = json_decode(file_get_contents(__DIR__ . '/form.json'), true);
 		
@@ -145,7 +91,16 @@ class HomeMaticBMConfigurator extends IPSModule
 			$instanceID = array_search($variableID, $Instances);
 			if ($InstanceID === false) {
 				// No existing instance, include in Values as new Instance
-				//$Values[] = 'varID' => $LowbatID, 'instance' => 0, 'device' => '', 'room' => '', 'floor' => ''];
+				$Values[] = [
+					'address' => $hm_address, 'variable' => $lowbat_id, 'path' => '', 'device' => '', 'name' => '', 
+					'create' => [
+						'moduleID' => '{A7B0B43B-BEB0-4452-B55E-CD8A9A56B052}',
+						'configuration' => [
+							'ROOT_ID' => $lowbat_id,
+							'UPDATE_NAME' => true
+						]
+					]
+				];
 			} else {
 				// Include in Values as existing instance
 				//$Values[] = ['valid' => true, 'varID' => $LowbatID, 'instance' => $InstanceID, 'device' => '', 'room' => '', 'floor' => ''];
