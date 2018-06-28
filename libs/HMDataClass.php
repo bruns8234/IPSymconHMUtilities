@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 	// --- BASE MESSAGE
 	if (!defined("IPS_BASE")) {
 		define('IPS_BASE', 10000);                             //Base Message

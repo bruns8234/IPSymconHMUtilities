@@ -1,9 +1,18 @@
-{
+﻿{
 	"translations": {
 		"de": {
-			"Welcome": "Willkommen",
-			"My name is %s": "Mein Name lautet %s",
-			"Example": "Beispiel"
+			"ID of LOWBAT variable to monitor:": "ID der zu überwachenden LOWBAT variable:",
+			"ID of a summary alarm variable:": "",
+			"The value of the summary alarm variable will be increased by 1 if this module detects a weak/empty battery and decreased when the alarm is cleared.": 			"Der Sammelalarmzähler wird um 1 erhöht wenn das Modul eine schwache/leere Batterie meldet und um 1 reduziert wenn ein Batteriewechsel gespeichert wird.",
+			"Update instance name with path/type": "Instanzname updaten (Pfad/Typ)",
+			"Empty": "Leer",
+			"Weak": "Schwach",
+			"Full": "Voll",
+			"Save": "Speichern",
+			"State": "Batteriestatus",
+			"First bat. alarm": "Erste Batteriemeldung",
+			"Last bat. change": "Letzter Batteriewechsel",
+			"Save bat. change": "Batteriewechsel speichern"
 		}
 	}
 }

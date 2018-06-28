@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 declare(strict_types=1);
 
@@ -18,6 +18,7 @@ class HomeMaticBMConfigurator extends IPSModule
 		
 		$this->RegisterPropertyInteger('ROOT_ID', 0);
 		$this->RegisterPropertyInteger('SUMALARM_ID', 0);
+		$this->RegisterPropertyBoolean('AUTO_UPDATE', false);
 	}
 	
 	public function ApplyChanges()
@@ -63,13 +64,12 @@ class HomeMaticBMConfigurator extends IPSModule
 						'configuration' => array(
 							'LOWBAT_ID' => $variableID,
 							'SUMALARM_ID' => $alarmID,
-							'UPDATE_NAME' => true
+							'UPDATE_NAME' => $this-ReadPropertyBoolean('AUTO_UPDATE')
 						)
 					)
 				);
 			} else {
 				// Include in Values as existing instance
-				$this->SendDebug('GetConfigurationForm', 'Add existing instance to list. info contains "'.implode('", "', $info).'"', 0);
 				$List[$hm_address] = array(
 					'address' => $hm_address,
 					'variable' => $variableID,

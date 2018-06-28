@@ -1,9 +1,13 @@
-{
+﻿{
 	"translations": {
 		"de": {
-			"Welcome": "Willkommen",
-			"My name is %s": "Mein Name lautet %s",
-			"Example": "Beispiel"
+			"Parent for new instances": "Rootelement für neu anzulegene Instanzen",
+			"Summary alarm indicator for weak/empty batteries": "Sammelalarmvariable für Batteriemeldungen",
+			"Activate automatic name update for new instances": "Automatisches Umbenennen neu angelegter Instanzen",
+			"Address": "Adresse",
+			"Variable": "Variable",
+			"Path": "Pfad",
+			"HM-Device": "HM-Gerät"
 		}
 	}
 }
