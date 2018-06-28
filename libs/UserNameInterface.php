@@ -4,35 +4,6 @@ declare(strict_types=1);
 
 trait UserNameInterface
 {
-	$hmDeviceNames = [
-		'ANZ' => 'LED Funk-Statusanzeige',
-		'FBH' => 'Fernbedienung (Handgerät)',
-		'FBA' => 'Fernbedienung (Aufputz)',
-		'FBU' => 'Fernbedienung (Unterputz)',
-		'FBV' => 'Fernbedienung (Modul)',
-		'TFK' => 'Tür/Fensterkontakt',
-		'KMS' => 'Wetter Kombi-Sensor',
-		'DMZ' => 'Dimmer (Zwischendecke)',
-		'DMS' => 'Dimmer (Zwischenstecker)',
-		'DMU' => 'Dimmer (Unterputz)',
-		'DMM' => 'Dimmer (Markenschalter)',
-		'DMP' => 'PWM-Dimmer (Zwischendecke)',
-		'STS' => 'Schalter (Zwischenstecker)',
-		'STM' => 'Schalter (Zwischenstecker) mit Leistungsmessung',
-		'STU' => 'Schalter (Unterputz)',
-		'STA' => 'Schalter (Aufputz)',
-		'STV' => 'Schalter (Modul)',
-		'RLU' => 'Rolladenschalter (Unterputz)',
-		'RTR' => 'Raumtemperaturregler',
-		'HZV' => 'Heizkörperventilantrieb',
-		'HRV' => 'Heizungsregelventil',
-		'TSA' => 'Türschlossantrieb',
-		'FEA' => 'Fenster-Kipp-Antrieb',
-		'FGT' => 'MP3 Funk-Gong (Tischgerät)',
-		'FRM' => 'Funk-Rauchmelder',
-		'REG' => 'Regensensor'
-	];
-
 	/**
 	 * This function get a path and a clear text name for the HM instance referred by the 
 	 * lowbat variable identified by parameter $id.
@@ -71,23 +42,139 @@ trait UserNameInterface
 	 */
 	protected function getVariableData($varID)
 	{
-		$levels = [];
-		$id = $varID;
-		do {
-			$id = IPS_GetParent($id);
-			if ($id > 0) {
-				$levels[] = IPS_GetName($id);
-			}
-		} while ($id > 0);
-		// Now we have [0]=channel, [1]=device, [2]=room, [3]=floor, [4]=root
-		$path = $levels[3] . '/' . $levels[2];
-		$devID = substr($levels[1], 0, 3);
-		$name  = $levels[1];
-		if (isset($hmDeviceNames[$devID])) {
-			$name = $hmDeviceNames[$devID] . ' (' . ord(substr($levels[1], 10, 1)) - 64 . ')';
-		}
-		$result = [$path, $name, $levels[1]];
+IPS_LogMessage('getVariableData', 'START of Function');
+		$hmDeviceNames = [
+			'ANZ' => 'LED Funk-Statusanzeige',
+			'FBH' => 'Fernbedienung',
+			'FBA' => 'Aufputz-FB-Sender',
+			'FBU' => 'Unterputz-FB-Sender',
+			'FBV' => 'Modul-FB-Sender',
+			'TFK' => 'Tür/Fensterkontakt',
+			'KMS' => 'Wetter Kombi-Sensor',
+			'DMZ' => 'Zwischendeckendimmer',
+			'DMS' => 'Steckdosendimmer',
+			'DMU' => 'Unterputzdimmer',
+			'DMM' => 'Markenschalterdimmer',
+			'DMP' => 'Zwischendecken-PWM-Dimmer',
+			'STS' => 'Schaltsteckdose',
+			'STM' => 'Schaltsteckdose mit Leistungsmessung',
+			'STU' => 'Unterputzschaltaktor',
+			'STA' => 'Aufputzschaltaktor',
+			'STV' => 'Modulschaltaktor',
+			'RLU' => 'Unterputz-Rolladenschalter',
+			'RTR' => 'Raumtemperaturregler',
+			'HZV' => 'Heizkörperventilantrieb',
+			'HRV' => 'Heizungsregelventil',
+			'TSA' => 'Türschlossantrieb',
+			'FEA' => 'Fenster-Kipp-Antrieb',
+			'FGT' => 'MP3 Tisch-Funk-Gong',
+			'FRM' => 'Funk-Rauchmelder',
+			'REG' => 'Regensensor'
+		];
+		$hmRooms = [
+			'URK' => 'Untergeschoss/Reifenkeller',
+			'KET' => 'Erdgeschoss/Kellertreppe',
+			'ESZ' => 'Erdgeschoss/Schlafzimmer',
+			'EFL' => 'Erdgeschoss/Flur',
+			'EWZ' => 'Erdgeschoss/Wohnzimmer',
+			'EKZ' => 'Erdgeschoss/Kaminzimmer',
+			'EEZ' => 'Erdgeschoss/Esszimmer',
+			'EKU' => 'Erdgeschoss/Küche',
+			'EWC' => 'Erdgeschoss/Gäste-WC',
+			'EBZ' => 'Erdgeschoss/Badezimmer',
+			'EWF' => 'Erdgeschoss/Windfang',
+			'OLF' => 'Obergeschoss/Lounge und Flur',
+			'OGH' => 'Obergeschoss/Gästezimmer Hof',
+			'OTH' => 'Obergeschoss/Thorsten',
+			'OGS' => 'Obergeschoss/Gästezimmer Strasse',
+			'OMZ' => 'Obergeschoss/Modelbahnzimmer',
+			'OBZ' => 'Obergeschoss/Badezimmer',
+			'DSB' => 'Dachboden/Spitzboden',
+			'TOR' => 'Aussen/Hoftor',
+			'PAV' => 'Aussen/Pavillion',
+			'BAR' => 'Personen/Barbara',
+			'BAR' => 'Personen/Barbara',
+			'GUE' => 'Personen/Günther',
+			'THO' => 'Personen/Thorsten',
+			'LAS' => 'Personen/Martina und Thomas',
+			'NIK' => 'Personen/Yvette und Marco',
+			'GAS' => 'Personen/Gäste',
+			'VAR' => 'Sonstige/Sonstige'
+		];
+		$devicename  = '';
+		$devicename  = IPS_GetName(IPS_GetParent(IPS_GetParent($varID)));
+IPS_LogMessage('getVariableData', 'Devicename is '.$devicename);
+
+		$name = '';
+		$ctname = '';
+		$type = '';
+		$room = '';
+		$path = '';
+		$typecount = 0;
+		$location = '';
 		
+		// Name is always $devicename
+		$name = $devicename;
+IPS_LogMessage('getVariableData', 'Set "name" to '.$devicename);
+		
+		// Any - in the string?
+		if (strpos($devicename, '-') === false) {
+IPS_LogMessage('getVariableData', 'Malformed devicename! Can not find any -...');
+		} else {
+			// Split at '-'...
+			$parts = explode('-', $devicename);
+IPS_LogMessage('getVariableData', 'Split devicename. Get '.count($parts).' elements: ['.implode('][', $parts).']');
+			// Now look how many parts we have (at least 2)...
+			$cnt = count($parts);
+			if ($cnt == 4) {
+IPS_LogMessage('getVariableData', 'We have 4 parts... parts[3] is location');
+				$location = $parts[3];
+			}
+			if ($cnt >= 3) {
+IPS_LogMessage('getVariableData', 'We have 3 or more parts...');
+				if (strlen($parts[2]) == 1) {
+IPS_LogMessage('getVariableData', 'Length of parts[2] = 1 --> this "'.$parts[2].'" is the tpyecount');
+					$typecount = ord($parts[2]) - 64;
+				} else {
+IPS_LogMessage('getVariableData', 'Length of parts[2] is invalid (must be one) - malformed devicename');
+					// Malformed third part (this is not a typecounter, assume its a location)
+					$location = $parts[2];
+IPS_LogMessage('getVariableData', 'Set location to parts[2] "'.$parts[2].'"');
+					$typecount = 0;
+IPS_LogMessage('getVariableData', 'Set typecount to 0');
+				}
+			}
+			$room = $parts[1];
+IPS_LogMessage('getVariableData', 'Set room to parts[1] "'.$parts[1].'"');
+			$type = $parts[0];
+IPS_LogMessage('getVariableData', 'Set type to parts[0] "'.$parts[0].'"');
+			
+			if (strlen($type) == 5) {
+				$type = substr($type, 0, 3);
+IPS_LogMessage('getVariableData', 'Length of type is 5, so the first 3 chars are the type ident = "'.$type.'"');
+			}
+		}
+		
+IPS_LogMessage('getVariableData', 'Check if "'.$type.'" is defined in $hmDeviceNames...');
+		if (isset($hmDeviceNames[$type])) {
+			$ctname = $hmDeviceNames[$type];
+IPS_LogMessage('getVariableData', 'Found type. ctname set to "'.$ctname.'"');
+		}
+IPS_LogMessage('getVariableData', 'Check if "'.$room.'" is defined in $hmRooms...');
+		if (isset($hmRooms[$room])) {
+			$path   = $hmRooms[$room];
+IPS_LogMessage('getVariableData', 'Found room. path set to "'.$path.'"');
+		}
+		
+		$result = [
+			'name'      => $name,
+			'ctname'    => $ctname,
+			'type'      => $type,
+			'typecount' => $typecount,
+			'room'      => $room,
+			'path'      => $path,
+			'location'  => $location
+		];
 		return $result;
 	}
 }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/../libs/HMDataClass.php';
 require_once __DIR__ . '/../libs/vP_Toolbox.php';
-require once __DIR__ . '/../libs/UserNameInterface.php';
+require_once __DIR__ . '/../libs/UserNameInterface.php';
 
 class HomeMaticBatteryMonitor extends IPSModule
 {
@@ -16,6 +16,7 @@ class HomeMaticBatteryMonitor extends IPSModule
         parent::Create();
 
         $this->RegisterPropertyInteger('LOWBAT_ID', 0);
+		$this->RegisterPropertyInteger('SUMALARM_ID', 0);
 		$this->RegisterPropertyBoolean('UPDATE_NAME', false);											   
     }
 
@@ -38,6 +39,7 @@ class HomeMaticBatteryMonitor extends IPSModule
 		
 		if ($this->ReadPropertyBoolean('UPDATE_NAME') == true) {
 			$this->UpdateInstanceName();
+		}
     }
 
     public function MessageSink($TimeStamp, $SenderID, $Message, $Data)
@@ -66,24 +68,49 @@ class HomeMaticBatteryMonitor extends IPSModule
 
 	public function UpdateInstanceName()
 	{
-
+IPS_LogMessage('UpdateInstanceName', 'START Function');
 		// Clear flag for automatic name updates if set
 		if ($this->ReadPropertyBoolean('UPDATE_NAME') == true) {
+IPS_LogMessage('UpdateInstanceName', 'Perform automatic update... clear update flag');
 			IPS_SetProperty($this->InstanceID, 'UPDATE_NAME', false);
 		}
 		
 		// Get ID of LOWBAT-Variable
 		$id = $this->ReadPropertyInteger("LOWBAT_ID");
+IPS_LogMessage('UpdateInstanceName', 'ID of source LOWBAT variable is '.$id);
 		
 		// getVariableData returns a full path and a clear text name for the
 		// HomeMatic instance containing the lowbat variable. The function must be
 		// customised in the trait file UserNameInterface.php.
-		$data = $this->getVariableData($id)
-		// Now we have in $data: [0]=path, [1]=name (or device when unknown), [2]=device
+		$data = $this->getVariableData($id);
+IPS_LogMessage('UpdateInstanceName', 'Read variable data:');
+IPS_LogMessage('UpdateInstanceName', 'name = ['.$data['name'].']');
+IPS_LogMessage('UpdateInstanceName', 'ctname = ['.$data['ctname'].']');
+IPS_LogMessage('UpdateInstanceName', 'type = ['.$data['type'].']');
+IPS_LogMessage('UpdateInstanceName', 'typecount = ['.$data['typecount'].']');
+IPS_LogMessage('UpdateInstanceName', 'room = ['.$data['room'].']');
+IPS_LogMessage('UpdateInstanceName', 'path = ['.$data['path'].']');
+IPS_LogMessage('UpdateInstanceName', 'location = ['.$data['location'].']');
+
+		// Now we have in $data: name, ctname, type, typecount, room, path, location
+		
+		// name = complete device name
+		// ctname = Clear text name of device "RLU01-OMZ-E-EWZ FEN LI" --> "Rolladenschalter (Unterputz)"
+		// type = Short type identificator    "RLU01-OMZ-E-EWZ FEN LI" --> "RLU"
+		// typecount = Counter for identical types per room
+		//                                    "RLU01-OMZ-E-EWZ FEN LI" --> 5
+		// room = Room ident                  "RLU01-OMZ-E-EWZ FEN LI" --> "OMZ"
+		// path = Full name path of room      "RLU01-OMZ-E-EWZ FEN LI" --> "Obergeschoss/Modellbahnzimmer"
+		// location = Hint for function/installation position
+		//                                    "RLU01-OMZ-E-EWZ FEN LI: location = "EWZ FEN LI")
 		
 		// Update Instance Data
-		IPS_SetName($this->InstanceID, $data[1]);
-		$this->SetSummary("Path: " . $data[0] . "\r\nDevice: " . $data[2]);
+IPS_LogMessage('UpdateInstanceName', 'Set name to ');
+		IPS_SetName($this->InstanceID, 
+					(strlen($data['ctname']) > 0 ? $data['ctname'] : $data['name']).' ('.$data['typecount'].')'
+					);
+IPS_LogMessage('UpdateInstanceName', '');
+		$this->SetSummary($data['path'] . ' [' . $data['name'] . ']');
 		
 		return true;
 	}
@@ -104,6 +131,13 @@ class HomeMaticBatteryMonitor extends IPSModule
             $this->SendDebug('HandleUpdate', 'Battery State Change from FULL to EMPTY', 0);
             SetValue($FirstLowAlarmID, date('d.m.Y'));
             SetValue($ModuleStateID, 1);
+			// Increase value of summary alarm by one if defined (value of property is > 0)
+			$SummaryAlarmID = $this->ReadPropertyInteger("SUMALARM_ID");
+			if ($SummaryAlarmID > 0) {
+				$value = GetValue($SummaryAlarmID);
+				$value += 1;
+				SetValue($SummaryAlarmID, $value);
+			}
 
             return;
         }
@@ -150,6 +184,12 @@ class HomeMaticBatteryMonitor extends IPSModule
 				
 				return;
             }
+			$SmmaryAlarmID = $this->ReadPropertyInteger("SUMALARM_ID");
+			if ($SummaryAlarmID > 0) {
+				$value = GetValue($SummaryAlarmID);
+				if ($value > 0) $value -= 1;
+				SetValue($SummaryAlarmID, $value);
+			}
         }
     }
 }

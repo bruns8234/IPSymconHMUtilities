@@ -4,7 +4,12 @@
             "type": "SelectCategory",
             "name": "ROOT_ID",
             "caption": "Parent for new instances"
-        }
+        },
+		{
+			"type": "SelectVariable",
+			"name": "SUMALARM_ID",
+			"caption": "Summary alarm indicator for weak/empty batteries"
+		}
     ],
     "actions": [
         {
@@ -14,7 +19,7 @@
             "add": false,
             "delete": true,
             "sort": {
-                "column": "address",
+                "column": "path",
                 "direction": "ascending"
             },
             "columns": [{
@@ -24,7 +29,7 @@
 				}, {
 					"caption": "Variable",
 					"name": "variable",
-					"width": "100px"
+					"visible": false
 				}, {
                     "caption": "Path",
                     "name": "path",
@@ -32,11 +37,7 @@
 				}, {
 					"caption": "HM-Device",
                     "name": "device",
-                    "width": "300px"
-                }, {
-					"caption": "Name",
-					"name": "name",
-					"width": "auto"
+                    "width": "auto"
 				}
             ],
             "values": []
