@@ -1,4 +1,4 @@
-﻿# HMUtilities
+# HMUtilities
 
 Folgende Module sind im Repository enthalten:
 

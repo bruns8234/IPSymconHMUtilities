@@ -1,20 +1,5 @@
-﻿<?php
-/************************************************************************************************************************
- * Modul: HM Battery Monitor
- * File.: module.php
- * 
- * (c)2018 by Thorsten Bruns (bruns8234)
- * 
- * Version: 36
- *
- * Revision:
- * 36	fixed: PresetValue killed instance data on every "ApplyChanges"
- * 35	fixed: forgot to call "ApplyChanges" after IPS_SetProperty" in UpdateInstanceName()
- * 34	added function to update instance name automatically upon creation
- * 
- ************************************************************************************************************************/
-
- declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 require_once __DIR__ . '/../libs/HMDataClass.php';
 require_once __DIR__ . '/../libs/vP_Toolbox.php';
