@@ -33,6 +33,7 @@ class HomeMaticBatteryIndicator extends IPSModule
 
 	public function SetAlarmActive($instanceID)
 	{
+IPS_LogMessage('SetAlarmActive', 'Register active alarm from '.IPS_GetName($instanceID).' ('.$instanceID.')');
 		// Get list of all registered alarms
 		$list = json_decode($this->ReadPropertyString('ACTIVE_ALARMS'), true);
 
@@ -58,6 +59,7 @@ class HomeMaticBatteryIndicator extends IPSModule
 
 	public function SetAlarmCleared($instanceID)
 	{
+IPS_LogMessage('SetAlarmActive', 'Register cleared alarm from '.IPS_GetName($instanceID).' ('.$instanceID.')');
 		// Get list of all registered alarms
 		$list = json_decode($this->ReadPropertyString('ACTIVE_ALARMS'), true);
 		
@@ -71,8 +73,7 @@ class HomeMaticBatteryIndicator extends IPSModule
 			foreach($list as $entry) {
 				$new[] = $entry;
 			}
-			$list = $new
-			}
+			$list = $new;
 		} elseif ($pos !== false) {
 			// Last alarm to clear...
 			$list = [];
@@ -103,9 +104,11 @@ class HomeMaticBatteryIndicator extends IPSModule
 		// Get actual list of raised alarms
 		$list = json_decode($this->ReadPropertyString('ACTIVE_ALARMS'), true);
 		if (count($list) > 0) {
+IPS_LogMessage('UpdateIcon', 'Set ICON to alarm icon '.$this->ReadPropertyString('ALARM_ICON'));
 			// Set ICON of this instance to the selected alarm icon
 			IPS_SetIcon($this->InstanceID, $this->ReadPropertyString('ALARM_ICON'));
 		} else {
+IPS_LogMessage('UpdateIcon', 'Reset ICON to transparent');
 			// Set ICON of this instance to transparent
 			IPS_SetIcon($this->InstanceID, "transparent");
 		}
