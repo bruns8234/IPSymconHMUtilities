@@ -31,7 +31,7 @@ class HomeMaticBatteryIndicator extends IPSModule
 		}
 	}
 
-	public function SetAlarmActive(integer $instanceID)
+	public function SetAlarmActive(int $instanceID)
 	{
 IPS_LogMessage('SetAlarmActive', 'Register active alarm from '.IPS_GetName($instanceID).' ('.$instanceID.')');
 		// Get list of all registered alarms
@@ -54,10 +54,10 @@ IPS_LogMessage('SetAlarmActive', 'Register active alarm from '.IPS_GetName($inst
 		// Save changed properties
 		IPS_ApplyChanges($this->InstanceID);
 
-		return true;
+		return;
 	}
 
-	public function SetAlarmCleared(integer $instanceID)
+	public function SetAlarmCleared(int $instanceID)
 	{
 IPS_LogMessage('SetAlarmActive', 'Register cleared alarm from '.IPS_GetName($instanceID).' ('.$instanceID.')');
 		// Get list of all registered alarms
@@ -90,7 +90,7 @@ IPS_LogMessage('SetAlarmActive', 'Register cleared alarm from '.IPS_GetName($ins
 		return;
 	}
 
-	public function InstanceAlarmPresent(integer $instanceID): bool
+	public function InstanceAlarmPresent(int $instanceID): bool
 	{
 		// Get list of all registered alarms
 		$list = json_decode($this->ReadPropertyString('ACTIVE_ALARMS'), true);
