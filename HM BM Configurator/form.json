@@ -13,6 +13,7 @@
 		{
 			"type": "Label",
 			"label": "Select an HM Battery Indicator Instance for a summary alarm indication"
+		},
 		{
 			"type": "CheckBox",
 			"name": "AUTO_UPDATE",
