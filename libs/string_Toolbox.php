@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 trait StringHelper
 {
-	function utf8_string_array_encode(&$array){
+	private function utf8_string_array_encode(&$array){
 		$func = function(&$value,&$key){
 			if(is_string($value)){
 				$value = utf8_encode($value);
