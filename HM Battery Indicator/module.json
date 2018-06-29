@@ -1,0 +1,13 @@
+{
+	"id": "{9D29C9F5-5D50-4166-8B13-95CE2C21D802}",
+	"name": "HomeMatic Battery Indicator",
+	"type": 3,
+	"vendor": "",
+	"aliases": [
+		"HomeMatic Battery Monitor"
+	],
+	"parentRequirements": [],
+	"childRequirements": [],
+	"implemented": [],
+	"prefix": "HMUTIL"
+}

@@ -2,7 +2,8 @@
 	"translations": {
 		"de": {
 			"Parent for new instances": "Rootelement für neu anzulegene Instanzen",
-			"Summary alarm indicator for weak/empty batteries": "Sammelalarmvariable für Batteriemeldungen",
+			"HM Battery Indicator Instance to use": "HM Battery Indicator Instanz zur Sammelalarmanzeige",
+			"Select an HM Battery Indicator Instance for a summary alarm indication": "Wählen Sie eine HM Battery Indicator Instance aus um eine Sammelalarmanzeige zu realisieren.",
 			"Activate automatic name update for new instances": "Automatisches Umbenennen neu angelegter Instanzen",
 			"Address": "Adresse",
 			"Variable": "Variable",

@@ -17,7 +17,7 @@ class HomeMaticBMConfigurator extends IPSModule
 		parent::Create();
 		
 		$this->RegisterPropertyInteger('ROOT_ID', 0);
-		$this->RegisterPropertyInteger('SUMALARM_ID', 0);
+		$this->RegisterPropertyInteger('BATTERYINDICATOR_ID', 0);
 		$this->RegisterPropertyBoolean('AUTO_UPDATE', false);
 	}
 	
@@ -34,8 +34,8 @@ class HomeMaticBMConfigurator extends IPSModule
 		// Instances is a list of ALL HMUTIL Battery Monitor Instances and the corresponding "LOWBAT" variable ID's
 		$Instances = $this->GetInstances();		// [ID of BM Inst] = <ID of LOWBAT variable>
 		
-		// Get the SUMALARM_ID if set ( > 0 )
-		$alarmID = $this->ReadPropertyInteger('SUMALARM_ID');
+		// Get the BATTERYINDICATOR_ID if set ( > 0 )
+		$IndicatorID = $this->ReadPropertyInteger('BATTERYINDICATOR_ID');
 		
 		asort($Instances);
 		sort($Variables);
@@ -63,8 +63,8 @@ class HomeMaticBMConfigurator extends IPSModule
 						'moduleID' => '{3AFD8764-0C36-4E2B-9E7F-A86FB9C57AE4}',
 						'configuration' => array(
 							'LOWBAT_ID' => $variableID,
-							'SUMALARM_ID' => $alarmID,
-							'UPDATE_NAME' => $this-ReadPropertyBoolean('AUTO_UPDATE')
+							'BATTERYINDICATOR_ID' => $IndicatorID,
+							'UPDATE_NAME' => $this->ReadPropertyBoolean('AUTO_UPDATE')
 						)
 					)
 				);
@@ -80,7 +80,7 @@ class HomeMaticBMConfigurator extends IPSModule
 						'moduleID' => '{3AFD8764-0C36-4E2B-9E7F-A86FB9C57AE4}',
 						'configuration' => array(
 							'LOWBAT_ID' => $variableID,
-							'SUMALARM_ID' => $alarmID,
+							'BATTERYINDICATOR_ID' => $IndicatorID,
 							'UPDATE_NAME' => false
 						)
 					)

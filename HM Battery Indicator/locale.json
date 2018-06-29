@@ -1,0 +1,15 @@
+{
+	"translations": {
+		"de": {
+			"Icon to indicate a battery alarm": "Icon für aktiven Batteriealarm",
+			"Alert": "Alarm",
+			"Battery": "Batterie",
+			"Eyes": "Auge",
+			"Gear": "Schraubenschlüssel",
+			"Help": "Hilfe (Kreuz)",
+			"Information": "Information (Ausrufezeichen)",
+			"Warning": "Warnung",
+			"The icon will be shown when one or more alarms are active. When there is no alarm the icon is set to transparent.": "Dieses Icon wird angezeigt wenn ein aktiver Batteriealarm ansteht. Wenn der letzte Alarm geht wird wieder auf das Transparent-Icon gewechselt."
+		}
+	}
+}

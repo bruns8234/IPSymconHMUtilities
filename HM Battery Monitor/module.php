@@ -15,7 +15,7 @@ class HomeMaticBatteryMonitor extends IPSModule
 		parent::Create();
 
 		$this->RegisterPropertyInteger('LOWBAT_ID', 0);
-		$this->RegisterPropertyInteger('SUMALARM_ID', 0);
+		$this->RegisterPropertyInteger('BATTERYINDICATOR_ID', 0);
 		$this->RegisterPropertyBoolean('UPDATE_NAME', false);
 	}
 
@@ -104,12 +104,10 @@ class HomeMaticBatteryMonitor extends IPSModule
 			$this->SendDebug('HandleUpdate', 'Battery State Change from FULL to EMPTY', 0);
 			SetValue($FirstLowAlarmID, date('d.m.Y'));
 			SetValue($ModuleStateID, 1);
-			// Increase value of summary alarm by one if defined (value of property is > 0)
-			$SummaryAlarmID = $this->ReadPropertyInteger("SUMALARM_ID");
-			if ($SummaryAlarmID > 0) {
-				$value = GetValue($SummaryAlarmID);
-				$value += 1;
-				SetValue($SummaryAlarmID, $value);
+			// Register active alarm with indicator instance, if selected
+			$IndicatorID = $this->ReadPropertyInteger("BATTERYINDICATOR_ID");
+			if ($IndicatorID > 0) {
+				HMUTIL_SetAlarmActive($this->InstanceID);
 			}
 
 			return;
@@ -159,11 +157,10 @@ class HomeMaticBatteryMonitor extends IPSModule
 
 				return;
 			}
-			$SmmaryAlarmID = $this->ReadPropertyInteger("SUMALARM_ID");
-			if ($SummaryAlarmID > 0) {
-				$value = GetValue($SummaryAlarmID);
-				if ($value > 0) $value -= 1;
-				SetValue($SummaryAlarmID, $value);
+			// Register cleared alarm with indicator instance, if selected
+			$IndicatorID = $this->ReadPropertyInteger("BATTERYINDICATOR_ID");
+			if ($IndicatorID > 0) {
+				HMUTIL_SetAlarmCleared($this->InstanceID);
 			}
 		}
 	}

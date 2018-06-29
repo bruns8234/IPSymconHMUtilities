@@ -6,14 +6,18 @@
             "caption": "Parent for new instances"
         },
 		{
-			"type": "SelectVariable",
-			"name": "SUMALARM_ID",
-			"caption": "Summary alarm indicator for weak/empty batteries"
+			"type": "SelectInstance",
+			"name": "BATTERYINDICATOR_ID",
+			"caption": "HM Battery Indicator Instance to use"
 		},
+		{
+			"type": "Label",
+			"label": "Select an HM Battery Indicator Instance for a summary alarm indication"
 		{
 			"type": "CheckBox",
 			"name": "AUTO_UPDATE",
 			"caption": "Activate automatic name update for new instances"
+		}
     ],
     "actions": [
         {
