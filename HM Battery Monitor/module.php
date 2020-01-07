@@ -23,8 +23,14 @@ class HomeMaticBatteryMonitor extends IPSModule
 	{
 		parent::ApplyChanges();
 
-		$this->RegisterProfileIntegerEx('HMUTIL.ModuleState', '', '', '', [[1, $this->Translate('Empty'), '', 0xff0000], [2, $this->Translate('Weak'), '', 0xffff00], [3, $this->Translate('Full'), '', 0x00ff00]]);
-		$this->RegisterProfileIntegerEx('HMUTIL.SaveButton', '', '', '', [[0, $this->Translate('Save'), '', 0x0000ff]]);
+		$this->RegisterProfileIntegerEx('HMUTIL.ModuleState', '', '', '', [
+						[1, $this->Translate('Empty'), '', 0xff0000],
+						[2, $this->Translate('Weak'), '', 0xffff00], 
+						[3, $this->Translate('Full'), '', 0x00ff00]
+		]);
+		$this->RegisterProfileIntegerEx('HMUTIL.SaveButton', '', '', '', [
+						[0, $this->Translate('Save'), '', 0x0000ff]
+		]);
 
 		$this->RegisterVariableInteger('STATE', $this->Translate('State'), 'HMUTIL.ModuleState', 1);
 		$this->RegisterVariableString('FIRST_LOW', $this->Translate('First bat. alarm'), '', 2);
@@ -81,7 +87,8 @@ class HomeMaticBatteryMonitor extends IPSModule
 		// Now we have in $data: name, ctname, type, typecount, room, path, location
 
 		// Update Instance Data
-		IPS_SetName($this->InstanceID, (strlen($data['ctname']) > 0 ? $data['ctname'] : $data['name']).' ('.$data['typecount'].')');
+		IPS_SetName($this->InstanceID, 
+			    (strlen($data['ctname']) > 0 ? $data['ctname'] : $data['name']).' ('.$data['typecount'].')');
 		$this->SetSummary($data['path'] . ' [' . $data['name'] . ']');
 
 		// Save changed properties, if any...
