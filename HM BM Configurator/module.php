@@ -12,6 +12,8 @@ class HomeMaticBMConfigurator extends IPSModule
 	use StringHelper;
 	use UserNameInterface;
 	
+	private const GUID = '{EE4A81C6-5C90-4DB7-AD2F-F6BBD521412E}';
+	
 	public function Create()
 	{
 		parent::Create();
@@ -147,7 +149,7 @@ class HomeMaticBMConfigurator extends IPSModule
 			if (IPS_GetObject($varID)['ObjectIdent'] == 'LOWBAT') {
 				$parentID = IPS_GetParent($varID);
 				if (IPS_GetObject($parentID)['ObjectType'] == 1) {
-					if (IPS_GetInstance($parentID)['ModuleInfo']['ModuleID'] == "{EE4A81C6-5C90-4DB7-AD2F-F6BBD521412E}") {
+					if (IPS_GetInstance($parentID)['ModuleInfo']['ModuleID'] == self::GUID) {
 						$Variables[] = $varID;
 					}
 				}
